@@ -1,81 +1,104 @@
-# 🧩 Modos do Copiloto (Ask, Edit, Plan, Agent e Study)
+# 🧩 Copiloto Multi-Stack — Ask, Edit, Plan, Agent e Study
 
 ![dio/me](https://img.shields.io/badge/dio-me-ff2d55)
 ![IA](https://img.shields.io/badge/IA-Assistente%20Inteligente-blue)
 ![Prompt](https://img.shields.io/badge/Prompt-engineering-yellow)
+![PHP](https://img.shields.io/badge/Stack-PHP-777BB4?logo=php&logoColor=white)
+![.NET](https://img.shields.io/badge/Stack-.NET-512BD4?logo=dotnet&logoColor=white)
+![Java](https://img.shields.io/badge/Stack-Java-ED8B00?logo=openjdk&logoColor=white)
 
-O Copiloto oferece diferentes **modos de interação** para você escolher como quer trabalhar: desde **tirar dúvidas sem mexer no código**, até **editar trechos específicos**, **planejar mudanças maiores** ou **delegar tarefas mais complexas** com um modo mais autônomo. A ideia é simples: você seleciona o modo que melhor combina com seu objetivo no momento e ganha velocidade com mais controle.
+O Copiloto oferece diferentes **modos de interação** para você escolher como quer trabalhar: desde **tirar dúvidas sem mexer no código**, até **planejar mudanças maiores** ou **delegar tarefas autônomas**. Os prompts suportam **PHP, .NET (C#) e Java**, além de uma opção **Custom** para qualquer outra linguagem ou framework.
+
+> **Personalidade:** todos os modos operam com a personalidade **J.A.R.V.I.S.** — formal, sofisticado, analítico e preciso.
 
 ---
 
-# ❓ Ask
-O modo **Ask** é para fazer perguntas e entender coisas, **sem alterar seu código**. Você pode perguntar sobre um arquivo específico, um erro, uma função, uma stack trace ou até conceitos gerais.
+## 🖥️ Seletor de Stack
 
-O Copiloto lê o contexto do projeto (arquivos abertos, seleção, etc.) e responde como um **“mentor técnico”**, explicando o que está acontecendo e por quê. **Ele não modifica nada** — só analisa e explica.
+Todos os prompts possuem um bloco de seleção no topo. Basta marcar `[x]` na linguagem desejada:
+
+```md
+- [ ] PHP    → Laravel / Symfony / Slim — PHP 8.x, Composer, PHPUnit
+- [ ] .NET   → ASP.NET Core / Minimal API — C# 12, .NET 8, EF Core
+- [ ] Java   → Spring Boot / Quarkus — Java 21, Maven/Gradle, JUnit 5
+- [ ] Custom → Linguagem: ___ | Framework: ___ (só o nome já basta)
+```
+
+> Se nenhuma opção for marcada, o padrão é **Java + Spring Boot**.
+
+---
+
+## ❓ Ask
+
+Modo **somente leitura** — responde dúvidas, explica código e diagnostica erros sem alterar nada.
+
+- Diagnóstico direcionado à linguagem ativa (stack trace PHP · `dotnet-trace` · `jstack`)
+- Seção **"WHEN TO ESCALATE"**: se a resposta exigir >3 arquivos, sugere mudar para PLAN ou AGENT
+- Links para documentação oficial em cada referência de API
+- Máximo de 2 perguntas quando faltar contexto — assume e declara o restante
 
 📄 **Prompt:** [prompts/prompt-ask.md](prompts/prompt-ask.md)
 
 ---
 
-# ✏️ Edit
-O modo **Edit** serve para **alterar código existente**. Você seleciona um trecho (ou um arquivo inteiro), descreve o que quer mudar, e o Copiloto aplica a modificação diretamente.
+## ✏️ Edit
 
-Ideal para:
-- refactors
-- ajustes de lógica
-- melhoria de performance
-- mudança de estilo
-- conversão de linguagem
-- adicionar logs
-- tratar erros
+Modo para **alterar código existente**. Selecione um trecho, descreva a mudança e o Copiloto aplica diretamente.
 
-Aqui o foco é: **“pegue isso que já existe e transforme”**.
+Ideal para: refactors · ajustes de lógica · melhoria de performance · conversão de linguagem · adicionar logs · tratar erros.
 
 📄 **Prompt:** [prompts/prompt-edit.md](prompts/prompt-edit.md)
 
 ---
 
-# 🧭 Plan
-Quando você pede algo mais complexo, o Copiloto pode entrar em um modo de **planejamento**, onde ele **pensa e descreve os passos antes de sair codando**.
+## 🧭 Plan
 
-Ele:
-- divide o problema em etapas
-- explica o que vai fazer
-- só depois executa
+Modo de **planejamento revisável** — pensa antes de codar. Produz um plano estruturado com:
 
-Isso é muito útil para **mudanças grandes**, **novas features** ou quando você quer **validar a abordagem** antes de mexer no código.
+- 🏷️ **Convenções da stack** (naming, estrutura de pastas, comando de bootstrap)
+- ⏱️ **Estimativa de complexidade** por passo: `S / M / L / XL`
+- ✅ **Definition of Done** como checklist de critérios de aceite
+- 🔄 **Estratégia de rollback** para mudanças de banco ou infra
+- Aguarda aprovação explícita antes de gerar qualquer código
 
 📄 **Prompt:** [prompts/prompt-plan.md](prompts/prompt-plan.md)
 
 ---
 
-# 🤖 Agent
-O **Agent** é o modo mais “autônomo”. Ele pode **navegar pelo projeto**, **criar arquivos**, **modificar múltiplos pontos** e **manter contexto entre passos**, como se fosse um dev júnior trabalhando com você.
+## 🤖 Agent
 
-Você dá um objetivo (ex.: “implemente login com JWT”) e ele decide o que precisa ser feito em vários arquivos para chegar lá.
+Modo mais **autônomo** — navega pelo projeto, cria arquivos e modifica múltiplos pontos para atingir um objetivo.
+
+- Regras de stack por ecossistema com comandos reais (`composer install` / `dotnet restore` / `mvn install`)
+- Diretivas de DI, ORM, Auth e Segurança para cada linguagem
+- Sugere **Conventional Commits** em inglês a cada entrega (`feat:` / `fix:` / `refactor:`)
+- Inclui **estratégia de rollback** para mudanças de schema ou infra
 
 📄 **Prompt:** [prompts/prompt-agent.md](prompts/prompt-agent.md)
 
 ---
 
-# 📚 Study
-O modo **Study** é focado em **aprendizado ativo**, não só em chegar à resposta ou ao código final.
+## 📚 Study
 
-Em vez de simplesmente explicar ou executar, ele:
-- ensina e guia o raciocínio
-- destaca conceitos e trade-offs
-- faz perguntas reflexivas
-- avança em progressão gradual de dificuldade
+Modo de **aprendizado ativo** — ensina conceitos com progressão de nível e prática guiada.
 
-Funciona quase como um **tutor particular**.
+- Progressão explícita: 🟢 Iniciante · 🟡 Intermediário · 🔴 Sênior
+- Exemplo mínimo sempre na linguagem da stack ativa
+- **Anti-patterns**: erros comuns e o que NÃO fazer
+- **Comparativo entre linguagens**: mesmo conceito em PHP, .NET e Java
+- **Exercício prático** com dica desbloqueável ("digita 'dica'")
+- Checkpoint de compreensão ao final de cada bloco
 
 📄 **Prompt:** [prompts/prompt-study.md](prompts/prompt-study.md)
 
 ---
 
-# 🧠 Resumo mental rápido
-- **Ask** → entender  
-- **Plan** → planejar antes de agir  
-- **Edit** → mudar código  
-- **Agent** → executar tarefas grandes sozinho  
-- **Study** → entendimento ativo  
+## 🧠 Resumo mental rápido
+
+| Modo | Para quê |
+|------|----------|
+| **Ask** | Entender, diagnosticar, tirar dúvidas |
+| **Plan** | Planejar antes de agir, validar abordagem |
+| **Edit** | Mudar código existente |
+| **Agent** | Executar tarefas grandes com autonomia |
+| **Study** | Aprender ativamente com tutoria guiada |
